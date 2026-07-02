@@ -20,6 +20,51 @@ enum UserStatus {
   @@map("user_status")
 }
 
+enum AuditAction {
+  // Auth
+  LOGIN_SUCCESS
+  LOGIN_FAILED
+  LOGOUT
+  TOKEN_REFRESHED
+  TOKEN_REVOKED
+
+  // Account
+  REGISTER
+  EMAIL_VERIFIED
+  PHONE_VERIFIED
+  PASSWORD_CHANGED
+  PASSWORD_RESET_REQUESTED
+  PASSWORD_RESET_COMPLETED
+  ACCOUNT_SUSPENDED
+  ACCOUNT_BANNED
+  ACCOUNT_REACTIVATED
+  ACCOUNT_DELETED
+
+  // Profile
+  PROFILE_UPDATED
+  KYC_SUBMITTED
+  KYC_VERIFIED
+  KYC_REJECTED
+
+  // 2FA
+  TFA_ENABLED
+  TFA_DISABLED
+  TFA_VERIFIED
+  TFA_FAILED
+  BACKUP_CODE_USED
+
+  // API Keys
+  API_KEY_CREATED
+  API_KEY_REVOKED
+
+  // Session
+  SESSION_CREATED
+  SESSION_REVOKED
+  ALL_SESSIONS_REVOKED
+
+  @@map("audit_action")
+}
+
 model User {
   id             String     @id @default(uuid()) @db.Uuid
   email          String     @unique @db.VarChar(255)
@@ -38,6 +83,8 @@ model User {
 
   profile        UserProfile?
   sessions       Session[]
+  apiKeys        ApiKey[]
+  auditLogs      AuditLog[]
 
   @@index([email])
   @@index([status])
@@ -88,7 +135,7 @@ model Session {
   userId             String    @map("user_id") @db.Uuid
   accessTokenJti     String    @unique @map("access_token_jti") @db.VarChar(255)
   refreshTokenHash   String    @map("refresh_token_hash") @db.VarChar(255)
-  ipAddress          String?   @map("ip_address") @db.VarChar(45)   // supports IPv6
+  ipAddress          String?   @map("ip_address") @db.VarChar(45)   
   userAgent          String?   @map("user_agent") @db.VarChar(500)
   deviceFingerprint  String?   @map("device_fingerprint") @db.VarChar(255)
   country            String?   @db.VarChar(3)
@@ -103,4 +150,46 @@ model Session {
   @@index([expiresAt])
   @@index([revokedAt])
   @@map("sessions")
+}
+
+model ApiKey {
+  id          String          @id @default(uuid()) @db.Uuid
+  userId      String          @map("user_id") @db.Uuid
+  name        String          @db.VarChar(100)
+  keyHash     String          @unique @map("key_hash") @db.VarChar(255)
+  keyPrefix   String          @map("key_prefix") @db.VarChar(16)    
+  ipWhitelist String[]        @map("ip_whitelist")                   
+  expiresAt   DateTime?       @map("expires_at") @db.Timestamptz
+  lastUsedAt  DateTime?       @map("last_used_at") @db.Timestamptz
+  createdAt   DateTime        @default(now()) @map("created_at") @db.Timestamptz
+  revokedAt   DateTime?       @map("revoked_at") @db.Timestamptz
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([keyHash])
+  @@index([revokedAt])
+  @@map("api_keys")
+}
+
+model AuditLog {
+  id            String      @id @default(uuid()) @db.Uuid
+  userId        String?     @map("user_id") @db.Uuid    
+  action        AuditAction
+  resource      String?     @db.VarChar(100)             
+  resourceId    String?     @map("resource_id") @db.Uuid
+  metadata      Json?       @db.JsonB                   
+  ipAddress     String?     @map("ip_address") @db.VarChar(45)
+  userAgent     String?     @map("user_agent") @db.VarChar(500)
+  success       Boolean     @default(true)
+  failureReason String?     @map("failure_reason") @db.VarChar(500)
+  createdAt     DateTime    @default(now()) @map("created_at") @db.Timestamptz
+
+  user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([userId])
+  @@index([action])
+  @@index([createdAt])
+  @@index([userId, createdAt])
+  @@map("audit_logs")
 }
