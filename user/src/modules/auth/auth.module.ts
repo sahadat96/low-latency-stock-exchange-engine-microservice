@@ -11,7 +11,6 @@ import { PassportModule } from '@nestjs/passport';
 import { LoggerMiddleware } from 'src/common/middleware/logger.middleware';
 import { AuthController } from './presentation/controller/auth.controller';
 
-
 @Module({
   imports:[
     PassportModule.register({ defaultStrategy: 'jwt' }),
@@ -20,10 +19,10 @@ import { AuthController } from './presentation/controller/auth.controller';
       global: true,
       inject: [ConfigService], 
       useFactory: (configService: ConfigService) => ({
-      secret: configService.get<string>('JWT_SECRET'),
-      signOptions: { 
-        expiresIn: configService.get<string>('JWT_EXPIRES_IN', '1h') as any, 
-      },
+        secret: configService.get<string>('JWT_SECRET'),
+        signOptions: { 
+            expiresIn: configService.get<string>('JWT_EXPIRES_IN', '1h') as any, 
+        },
       }),
     }),
   ],
@@ -48,3 +47,4 @@ export class AuthModule implements NestModule {
     .forRoutes(AuthController);
   }
 }
+
