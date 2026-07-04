@@ -9,7 +9,6 @@ import { ApiProperty } from '@nestjs/swagger';
 
 export enum AccountType {
   USER = 'USER',
-  VENDOR = 'VENDOR',
 }
 
 export class RegisterDto {
@@ -33,7 +32,7 @@ export class RegisterDto {
   @ApiProperty({ example: '123456' })
   confirmPassword!: string;
 
-  @IsEnum(AccountType, { message: 'accountType must be USER or VENDOR' })
-  @ApiProperty({ example: 'VENDOR' })
+  @IsEnum(AccountType, { message: 'accountType must be USER ' })
+  @ApiProperty({ example: 'USER' })
   accountType!: AccountType;
 }
