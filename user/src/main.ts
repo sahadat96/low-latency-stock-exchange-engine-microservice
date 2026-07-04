@@ -13,6 +13,11 @@ import helmet from 'helmet';
 import morgan from 'morgan'; 
 import cookieParser from 'cookie-parser';
 
+import { 
+  SwaggerModule, 
+  DocumentBuilder,
+} from '@nestjs/swagger';
+
 async function bootstrap() {
 
   const app = await NestFactory.create<NestExpressApplication>(
@@ -31,6 +36,7 @@ async function bootstrap() {
   });
 
   const nodeEnv = configService.get<string>('NODE_ENV') || 'development';
+
   if (nodeEnv === 'development') {
     app.use(morgan('dev')); 
   } else {
@@ -55,6 +61,18 @@ async function bootstrap() {
   app.enableShutdownHooks();
 
   app.use(cookieParser());
+
+   if (nodeEnv !== 'production') {
+    const swaggerConfig = new DocumentBuilder()
+      .setTitle('User Service API')
+      .setDescription('API documentation for user service backend')
+      .setVersion('1.0')
+      .addBearerAuth()
+      .build();
+
+    const document = SwaggerModule.createDocument(app, swaggerConfig);
+    SwaggerModule.setup('api/docs', app, document);
+  }
 
   const port = configService.get<number>('PORT') || 3000;
   const host = configService.get<string>('HOST') || '10.10.33.9';
