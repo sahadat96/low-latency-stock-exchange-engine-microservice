@@ -6,6 +6,5 @@ export interface IUserRepository {
 
   findById(id: string): Promise<User | null>
 
-  create(user: User, roleType: 'USER' | 'VENDOR'): Promise<User>;
-
+  create(user: User, roleType: 'USER' | 'ADMIN'): Promise<User>;
 }

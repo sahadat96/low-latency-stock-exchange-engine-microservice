@@ -8,8 +8,9 @@ import { PrismaService } from '../../prisma/prisma.service';
 import { ConfigService } from '@nestjs/config';
 import { PassportModule } from '@nestjs/passport';
 
-import { LoggerMiddleware } from 'src/common/middleware/logger.middleware';
+import { UserRepository } from './infrastructure/repositories/user.repository';
 import { AuthController } from './presentation/controller/auth.controller';
+import { LoggerMiddleware } from 'src/common/middleware/logger.middleware';
 
 @Module({
   imports:[
@@ -31,6 +32,10 @@ import { AuthController } from './presentation/controller/auth.controller';
   ],
   providers:[
     PrismaService,
+     {
+      provide: 'IUserRepository',
+      useClass: UserRepository,
+    },
   ],
   exports: [
     JwtModule,

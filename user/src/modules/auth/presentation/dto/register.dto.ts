@@ -3,16 +3,18 @@ import {
     IsNotEmpty, 
     IsString, 
     MinLength, 
-    IsEnum 
+    IsEnum,
+    IsPhoneNumber,
 } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export enum AccountType {
   USER = 'USER',
+  ADMIN = 'ADMIN',
 }
 
 export class RegisterDto {
-    
+
   @IsString()
   @ApiProperty({ example: 'sahadat' })
   name!: string;
@@ -20,6 +22,10 @@ export class RegisterDto {
   @IsEmail({}, { message: 'Please Valid Email' })
   @ApiProperty({ example: 'sahadat@gmail.com' })
   email!: string;
+
+  @IsString()
+  @ApiProperty({ example: '+880 1800-000000' })
+  phone!: string;
 
   @IsString()
   @IsNotEmpty()

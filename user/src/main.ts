@@ -27,15 +27,19 @@ async function bootstrap() {
 
   const configService = app.get(ConfigService);
 
-  app.use(helmet());
+  const nodeEnv = configService.get<string>('NODE_ENV') || 'development';
+
+  if (nodeEnv !== 'production') {
+      app.use(helmet({ contentSecurityPolicy: false }));
+    } else {
+      app.use(helmet());
+  }
 
   app.enableCors({
     origin: configService.get<string>('FRONTEND_URL') || '*', 
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
   });
-
-  const nodeEnv = configService.get<string>('NODE_ENV') || 'development';
 
   if (nodeEnv === 'development') {
     app.use(morgan('dev')); 
@@ -62,11 +66,12 @@ async function bootstrap() {
 
   app.use(cookieParser());
 
-   if (nodeEnv !== 'production') {
+  if (nodeEnv !== 'production') {
     const swaggerConfig = new DocumentBuilder()
       .setTitle('User Service API')
       .setDescription('API documentation for user service backend')
       .setVersion('1.0')
+      .addServer('http://10.10.33.9:3000')
       .addBearerAuth()
       .build();
 
@@ -84,7 +89,7 @@ async function bootstrap() {
 
   console.log(`API: ${host}:${port}/api/v1`);
   if (nodeEnv !== 'production') {
-    console.log(`Docs: ${host}:${port}/docs`);
+    console.log(`Docs: ${host}:${port}/api/docs`);;
   }
   
 }

@@ -8,9 +8,9 @@ enum UserStatus {
 export interface UserProps {
   id: string;
   email: string;
-  password?: string | null;
-  phone: string;
-  status: UserStatus
+  passwordHash: string;
+  phone?: string;
+  status?: UserStatus
   roleId?: string;
   role?: any;
 
@@ -25,7 +25,7 @@ export interface UserProps {
 export class User {
   public id: string;
   public email: string;
-  public passwordHash?: string | null ;
+  public passwordHash: string;
   public phone!: string;
   public status!: UserStatus;
   public roleId?: string;
@@ -41,8 +41,7 @@ export class User {
   constructor(props: UserProps) {
     this.id = props.id;
     this.email = props.email;
-    this.passwordHash = props.password;
-    this.phone = props.phone;
+    this.passwordHash = props.passwordHash;
     this.roleId = props.roleId;
     this.role = props.role;
 

@@ -16,19 +16,19 @@ import * as bcrypt from 'bcrypt';
 import { v4 as uuidv4 } from 'uuid';
 
 import type { IUserRepository } from '../domain/interfaces/user.repository.interface';
+import { User } from '../domain/entities/user.entity';
 
-import { RegisterDto } from '../presentation/dto/registerDto/register.dto';
+import { RegisterDto } from '../presentation/dto/register.dto';
 @Injectable()
 export class AuthService {
   constructor(
     @Inject('IUserRepository')
     private readonly userRepository: IUserRepository,
-    private readonly authOtpQueueService: AuthOtpQueueService,
   ) {}
 
   async register(registerDto: RegisterDto): Promise<any> {
     
-    const { email, password, confirmPassword, accountType, name  } = registerDto;
+    const { email, password, confirmPassword, accountType, phone  } = registerDto;
 
     if(password !== confirmPassword){
       throw new BadRequestException;
@@ -40,23 +40,17 @@ export class AuthService {
       throw new ConflictException('Email already exist');
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const passwordHash = await bcrypt.hash(password, 10);
 
     const newUser = new User({
       id: uuidv4(),
       email: email,
-      password: hashedPassword,
-      name: name,
+      passwordHash: passwordHash
     });
 
-    const roleType = accountType === 'VENDOR' ? 'VENDOR' : 'USER';
+    const roleType = accountType === 'ADMIN' ? 'ADMIN' : 'USER';
 
     const savedUser = await this.userRepository.create(newUser, roleType);
-
-    await this.authOtpQueueService.addEmailVerificationOtpJob({
-      userId: savedUser.id,
-      email: savedUser.email,
-    });
 
     return {
       message: 'Registration Successfull',
@@ -64,9 +58,7 @@ export class AuthService {
         id: savedUser.id,
         email: savedUser.email,
         role: savedUser.role?.name,
-        isVerified: savedUser.isEmailVerified,
       }
     };
   }
 }
-
