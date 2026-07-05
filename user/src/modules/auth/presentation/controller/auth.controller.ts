@@ -14,8 +14,8 @@ import { ConfigService } from '@nestjs/config';
 
 import { AuthService } from '../../application/auth.service';
 
-import { Public } from '.../../src/common/decorators/public.decorator';
-import { ResponseMessage } from '.../../src/common/decorators/response-message.decorator';
+import { Public } from '@/common/decorators/public.decorator';
+import { ResponseMessage } from '@/common/decorators/response-message.decorator';
 import { RegisterDto } from '../dto/register.dto';
 import { 
     ApiTags,
