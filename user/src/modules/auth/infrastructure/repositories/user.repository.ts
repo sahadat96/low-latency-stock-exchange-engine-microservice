@@ -1,8 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../../../../prisma/prisma.service';
 
-import { IUserRepository} from '../../domain/interfaces/user.repository.interface';
 import { User } from '../../domain/entities/user.entity';
+
+import { 
+  IUserRepository,
+  LoginUserView,
+} from '../../domain/interfaces/user.repository.interface';
+
 import { UserMapper } from '../mappers/user.mapper';
 
 @Injectable()
@@ -60,5 +65,25 @@ export class UserRepository implements IUserRepository {
     if(!user) return null;
 
     return UserMapper.toDomain(user);
+  }
+
+  async findLoginUserByEmail(email: string): Promise<LoginUserView | null> {
+
+    return this.prisma.user.findUnique({
+      where: { email },
+      select: {
+        id: true,
+        email: true,
+        passwordHash: true,
+        emailVerified: true,
+
+        role: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+      },
+    });
   }
 }

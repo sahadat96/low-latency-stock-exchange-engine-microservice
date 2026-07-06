@@ -3,8 +3,8 @@ import { User } from '../entities/user.entity';
 export interface LoginUserView {
   id: string;
   email: string;
-  password: string | null;
-  email_verified: boolean;
+  passwordHash: string;
+  emailVerified: boolean;
 
   role: {
     id: string;
