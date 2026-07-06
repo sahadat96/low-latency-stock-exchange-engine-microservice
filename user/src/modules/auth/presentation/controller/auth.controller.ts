@@ -39,4 +39,34 @@ export class AuthController {
     register(@Body() registerDto: RegisterDto ) {
       return this.authService.register(registerDto);
   }
+
+  @Post('login')
+  @Public()
+  @ResponseMessage('Login Succesful')
+  @ApiOperation({ summary: 'Login' })
+  @ApiResponse({ status: 201, description: 'Login Successfull' })
+  async login(
+    @Body() loginDto: LoginDto, 
+    @Res({ passthrough: true }) res: Response 
+  ) {
+
+    const response = await this.authService.login(loginDto);
+    const refreshToken = response.data.refreshToken;
+
+    res.cookie('refreshToken', response.data.refreshToken, {
+      httpOnly: true, 
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict', 
+      maxAge: 24 * 60 * 60 * 1000,
+    });
+    
+    return {
+      message: response.message,
+      data: {
+        accessToken: response.data.accessToken,
+        refreshToken: refreshToken,
+        user: response.data.user
+      }
+    };
+  }
 }
