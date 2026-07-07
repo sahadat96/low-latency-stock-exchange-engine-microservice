@@ -1,4 +1,5 @@
 import { User } from '../entities/user.entity';
+import { RoleType } from '@/common/enums/role-type.enum';
 
 export interface LoginUserView {
   id: string;
@@ -18,7 +19,7 @@ export interface IUserRepository {
 
   findById(id: string): Promise<User | null>
 
-  create(user: User, roleType: 'USER' | 'ADMIN'): Promise<User>;
+  create(user: User, roleType: RoleType): Promise<User>;
   
   findLoginUserByEmail(email: string): Promise<LoginUserView | null>;
 }

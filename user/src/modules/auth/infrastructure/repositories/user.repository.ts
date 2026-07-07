@@ -10,6 +10,8 @@ import {
 
 import { UserMapper } from '../mappers/user.mapper';
 
+import { RoleType } from '@/common/enums/role-type.enum';
+
 @Injectable()
 export class UserRepository implements IUserRepository {
 
@@ -27,7 +29,7 @@ export class UserRepository implements IUserRepository {
     return UserMapper.toDomain(user);
   }
 
-  async create(user: User, roleType: 'USER' | 'ADMIN'): Promise<User> {
+  async create(user: User, roleType: RoleType ): Promise<User> {
 
     const created = await this.prisma.user.create({
       data: {

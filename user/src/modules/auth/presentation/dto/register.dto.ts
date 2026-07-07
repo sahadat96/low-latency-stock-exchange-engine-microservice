@@ -8,10 +8,7 @@ import {
 } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
-export enum AccountType {
-  USER = 'USER',
-  ADMIN = 'ADMIN',
-}
+import { RoleType } from '@/common/enums/role-type.enum';
 
 export class RegisterDto {
 
@@ -38,7 +35,7 @@ export class RegisterDto {
   @ApiProperty({ example: '123456' })
   confirmPassword!: string;
 
-  @IsEnum(AccountType, { message: 'accountType must be USER ' })
-  @ApiProperty({ example: 'USER' })
-  accountType!: AccountType;
+  @IsEnum(RoleType, { message: `accountType must be one of: ${Object.values(RoleType).join(', ')}`, })
+  @ApiProperty({ example: 'RETAIL, INSTITUTIONAL' })
+  accountType!: RoleType;
 }

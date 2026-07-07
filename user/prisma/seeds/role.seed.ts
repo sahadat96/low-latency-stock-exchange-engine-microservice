@@ -1,7 +1,7 @@
 import { PrismaClient } from '@prisma/client';
 
 export async function seedRoles(prisma: PrismaClient) {
-  const roles = ['ADMIN', 'USER', 'VENDOR'];
+  const roles = ['RETAIL', 'INSTITUTIONAL', 'ADMIN'];
 
   const roleMap: Record<string, string> = {};
 

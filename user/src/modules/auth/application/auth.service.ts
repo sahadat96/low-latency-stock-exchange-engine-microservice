@@ -20,6 +20,7 @@ import { User } from '../domain/entities/user.entity';
 
 import { RegisterDto } from '../presentation/dto/register.dto';
 import { LoginDto } from '../presentation/dto/login.dto';
+import { RoleType } from 'src/common/enums/role-type.enum';
 
 @Injectable()
 export class AuthService {
@@ -52,9 +53,10 @@ export class AuthService {
       passwordHash: passwordHash
     });
 
-    const roleType = accountType === 'ADMIN' ? 'ADMIN' : 'USER';
-
-    const savedUser = await this.userRepository.create(newUser, roleType);
+    const savedUser = await this.userRepository.create(
+      newUser, 
+      accountType,
+    );
 
     return {
       message: 'Registration Successfull',
