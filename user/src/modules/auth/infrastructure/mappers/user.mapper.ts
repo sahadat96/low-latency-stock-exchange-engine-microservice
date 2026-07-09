@@ -1,5 +1,6 @@
 import { User } from '../../domain/entities/user.entity';
 
+// User Mapper
 export class UserMapper {
     
   static toDomain(raw: any): User {
