@@ -10,6 +10,7 @@ import {
 
 import { CreateApiKeyDto } from '../dto/api-key.dto';
 import { CreateApiKeyResponseDto } from '../dto/api-key.response.dto';
+import { ApiKeyService } from '../../application/api-key.service';
 
 @Controller('api-keys')
 export class ApiKeyController {
