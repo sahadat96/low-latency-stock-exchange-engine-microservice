@@ -30,4 +30,24 @@ export class ApiKeyRepository implements IApiKeyRepository {
       },
     });
   }
+
+  async findByPrefix(
+    filter: FindApiKeyByPrefixFilter,
+  ): Promise<ApiKeyEntity | null> {
+    return this.prisma.apiKey.findFirst({
+      where: {
+        keyPrefix:  filter.keyPrefix,
+        revokedAt:  filter.includeRevoked ? undefined : null,
+      },
+    });
+  }
+
+  async count(filter: CountApiKeysFilter): Promise<number> {
+    return this.prisma.apiKey.count({
+      where: {
+        userId:    filter.userId,
+        revokedAt: filter.activeOnly ? null : undefined,
+      },
+    });
+  }
 }

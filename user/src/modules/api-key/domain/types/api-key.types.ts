@@ -1,4 +1,4 @@
-import { ApiKey } from "../entities/api-key";
+import { ApiKey } from "@prisma/client";
 
 export type ApiKeyEntity = ApiKey;
 
