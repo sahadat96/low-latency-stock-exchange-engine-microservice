@@ -1,4 +1,5 @@
 
+// Api key entity
 export interface ApiKey {
   id: string;
   userId: string;
