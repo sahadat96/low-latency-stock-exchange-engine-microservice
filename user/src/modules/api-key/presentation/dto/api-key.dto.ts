@@ -9,6 +9,7 @@ import {
   Matches,
   MaxLength,
   MinLength,
+  IsBoolean
 } from 'class-validator';
 
 export class CreateApiKeyDto {
@@ -33,3 +34,16 @@ export class CreateApiKeyDto {
   @IsDateString({}, { message: 'expiresAt must be a valid ISO 8601 date string' })
   expiresAt?: string;
 }
+
+export class ListApiKeysQueryDto {
+  @IsOptional()
+  @IsBoolean()
+  @Transform(({ value }) => {
+    // Query strings arrive as raw strings — "true"/"false" → boolean
+    if (value === 'true')  return true;
+    if (value === 'false') return false;
+    return value;
+  })
+  active?: boolean;
+}
+ 

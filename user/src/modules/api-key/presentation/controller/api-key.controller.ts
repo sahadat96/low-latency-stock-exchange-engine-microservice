@@ -6,6 +6,8 @@ import {
   Ip,
   Post,
   UseGuards,
+  Get,
+  Query,
 } from '@nestjs/common';
 
 import { ApiKeyService } from '../../application/api-key.service';
@@ -28,5 +30,14 @@ export class ApiKeyController {
     @Ip() ip: string,
   ): Promise<CreateApiKeyResponseDto> {
     return this.apiKeyService.createApiKey(user.sub, dto, ip);
+  }
+
+  @Get()
+  @HttpCode(HttpStatus.OK)
+  async listApiKeys(
+    @CurrentUser() user: JwtPayload,
+    @Query() query: ListApiKeysQueryDto,
+  ): Promise<ApiKeyListResponseDto> {
+    return this.apiKeyService.listApiKeys(user.sub, query);
   }
 }
