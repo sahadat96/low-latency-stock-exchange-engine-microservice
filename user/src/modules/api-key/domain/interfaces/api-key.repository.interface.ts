@@ -15,6 +15,8 @@ export interface IApiKeyRepository {
   count(filter: CountApiKeysFilter): Promise<number>;
 
   findByPrefix(filter: FindApiKeyByPrefixFilter): Promise<ApiKeyEntity | null>;
+
+  findAllByUser(filter: ListApiKeysFilter): Promise<ApiKeyEntity[]>;
 }
 
 export const API_KEY_REPOSITORY = Symbol('IApiKeyRepository');

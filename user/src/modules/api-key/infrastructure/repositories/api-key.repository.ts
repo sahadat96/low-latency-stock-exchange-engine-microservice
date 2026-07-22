@@ -50,4 +50,16 @@ export class ApiKeyRepository implements IApiKeyRepository {
       },
     });
   }
+
+  async findAllByUser(
+    filter: ListApiKeysFilter,
+  ): Promise<ApiKeyEntity[]> {
+    return this.prisma.apiKey.findMany({
+      where: {
+        userId:    filter.userId,
+        revokedAt: filter.includeRevoked === false ? null : undefined,
+      },
+      orderBy: { createdAt: 'desc' },
+    });
+  }
 }
