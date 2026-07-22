@@ -55,6 +55,7 @@ export class ApiKeyService {
     private readonly auditLogRepository: IAuditLogRepository,
   ) {}
 
+  // Create api key method
   async createApiKey(
     userId: string,
     dto: CreateApiKeyDto,
