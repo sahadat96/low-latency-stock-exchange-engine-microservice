@@ -8,7 +8,11 @@ import {
   Logger,
   NotFoundException,
 } from '@nestjs/common';
-import { AuditAction } from '@prisma/client';
+
+import { 
+  AuditAction,
+  ApiKey,
+} from '@prisma/client';
 import * as bcrypt from 'bcrypt';
 
 import type {
@@ -22,10 +26,14 @@ import { API_KEY_REPOSITORY } from '../domain/interfaces/api-key.repository.inte
 
 import { ApiKeyMapper } from '../infrastructure/mapper/api-key.mapper';
 
-import { CreateApiKeyDto } from '../presentation/dto/api-key.dto';
+import { 
+  CreateApiKeyDto,
+  ListApiKeysQueryDto,
+ } from '../presentation/dto/api-key.dto';
+
 import { 
     CreateApiKeyResponseDto,
-    ApiKeyDto 
+    ApiKeyListResponseDto,
 } from '../presentation/dto/api-key.response.dto';
 
 const MAX_KEYS_PER_USER    = 10;
@@ -163,5 +171,32 @@ export class ApiKeyService {
       .catch((err: Error) => {
         this.logger.error(`Audit log failed [${payload.action}]: ${err.message}`);
       });
+  }
+
+  async listApiKeys(
+    userId: string,
+    query: ListApiKeysQueryDto,
+  ): Promise<ApiKeyListResponseDto> {
+ 
+    const allKeys: ApiKey[] = await this.apiKeyRepository.findAllByUser({
+      userId,
+      includeRevoked: true,
+    });
+  
+    const now = new Date();
+ 
+    const filteredKeys: ApiKey[] = (() => {
+      if (query.active === undefined) return allKeys;
+ 
+      return allKeys.filter((key) => {
+        const active =
+          !key.revokedAt &&
+          (!key.expiresAt || key.expiresAt > now);
+ 
+        return query.active ? active : !active;
+      });
+    })();
+ 
+    return ApiKeyMapper.toDtoList(allKeys, filteredKeys, query);
   }
 }
