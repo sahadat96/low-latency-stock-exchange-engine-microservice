@@ -62,4 +62,31 @@ export class ApiKeyRepository implements IApiKeyRepository {
       orderBy: { createdAt: 'desc' },
     });
   }
+
+  async revoke(
+    userId: string,
+    apiKeyId: string,
+  ): Promise<ApiKeyEntity | null> {
+
+    const apiKey = await this.prisma.apiKey.findFirst({
+      where: {
+        id: apiKeyId,
+        userId,
+        revokedAt: null,
+      },
+    });
+
+    if (!apiKey) {
+      return null;
+    }
+
+    return this.prisma.apiKey.update({
+      where: {
+        id: apiKey.id,
+      },
+      data: {
+        revokedAt: new Date(),
+      },
+    });
+  }
 }
