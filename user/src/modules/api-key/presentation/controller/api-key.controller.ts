@@ -8,6 +8,8 @@ import {
   UseGuards,
   Get,
   Query,
+  Delete,
+  Param,
 } from '@nestjs/common';
 
 import { ApiKeyService } from '../../application/api-key.service';
@@ -46,5 +48,19 @@ export class ApiKeyController {
     @Query() query: ListApiKeysQueryDto,
   ): Promise<ApiKeyListResponseDto> {
     return this.apiKeyService.listApiKeys(user.sub, query);
+  }
+
+  @Delete(':id')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async revokeApiKey(
+    @CurrentUser() user: JwtPayload,
+    @Param('id') id: string,
+    @Ip() ip: string,
+  ): Promise<void> {
+    await this.apiKeyService.revokeApiKey(
+      user.sub,
+      id,
+      ip,
+    );
   }
 }
