@@ -19,6 +19,8 @@ export interface IApiKeyRepository {
   findAllByUser(filter: ListApiKeysFilter): Promise<ApiKeyEntity[]>;
 
   revoke(userId: string, apiKeyId: string): Promise<ApiKeyEntity | null>;
+  
+  revokeAll(userId: string): Promise<number>;
 }
 
 export const API_KEY_REPOSITORY = Symbol('IApiKeyRepository');

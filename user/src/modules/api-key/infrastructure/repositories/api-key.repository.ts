@@ -89,4 +89,25 @@ export class ApiKeyRepository implements IApiKeyRepository {
       },
     });
   }
+
+  async revokeAll(
+    userId: string,
+  ): Promise<number> {
+
+    const result =
+      await this.prisma.apiKey.updateMany({
+
+        where: {
+          userId,
+          revokedAt: null,
+        },
+
+        data: {
+          revokedAt: new Date(),
+        },
+
+      });
+
+    return result.count;
+  }
 }
