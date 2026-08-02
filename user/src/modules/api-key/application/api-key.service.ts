@@ -200,4 +200,38 @@ export class ApiKeyService {
  
     return ApiKeyMapper.toDtoList(allKeys, filteredKeys, query);
   }
+
+  async revokeApiKey(
+    userId: string,
+    apiKeyId: string,
+    ipAddress?: string,
+  ): Promise<void> {
+
+    const apiKey = await this.apiKeyRepository.revoke(
+      userId,
+      apiKeyId,
+    );
+
+    if (!apiKey) {
+      throw new NotFoundException(
+        'API key not found.',
+      );
+    }
+
+    this.fireAuditLog({
+      userId,
+      action: AuditAction.API_KEY_REVOKED,
+      resource: 'api_key',
+      resourceId: apiKey.id,
+      ipAddress,
+      metadata: {
+        keyPrefix: apiKey.keyPrefix,
+        keyName: apiKey.name,
+      },
+    });
+
+    this.logger.log(
+      `API key revoked user=${userId} key=${apiKey.id}`,
+    );
+  }
 }
