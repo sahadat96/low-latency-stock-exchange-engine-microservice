@@ -56,6 +56,7 @@ enum AuditAction {
   // API Keys
   API_KEY_CREATED
   API_KEY_REVOKED
+  API_KEY_REVOKED_ALL
 
   // Session
   SESSION_CREATED

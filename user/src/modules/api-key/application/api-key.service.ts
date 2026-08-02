@@ -234,4 +234,27 @@ export class ApiKeyService {
       `API key revoked user=${userId} key=${apiKey.id}`,
     );
   }
+
+  async revokeAllApiKeys(
+    userId: string,
+    ipAddress?: string,
+  ): Promise<void> {
+
+    const revokedCount =
+      await this.apiKeyRepository.revokeAll(userId);
+
+    this.fireAuditLog({
+      userId,
+      action: AuditAction.API_KEY_REVOKED_ALL,
+      resource: 'api_key',
+      ipAddress,
+      metadata: {
+        revokedCount,
+      },
+    });
+
+    this.logger.warn(
+      `All API keys revoked for user=${userId}. Count=${revokedCount}`,
+    );
+  }
 }
