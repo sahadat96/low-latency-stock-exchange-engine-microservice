@@ -63,4 +63,16 @@ export class ApiKeyController {
       ip,
     );
   }
+
+  @Post('revoke-all')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async revokeAllApiKeys(
+    @CurrentUser() user: JwtPayload,
+    @Ip() ip: string,
+  ): Promise<void> {
+    await this.apiKeyService.revokeAllApiKeys(
+      user.sub,
+      ip,
+    );
+  }
 }
