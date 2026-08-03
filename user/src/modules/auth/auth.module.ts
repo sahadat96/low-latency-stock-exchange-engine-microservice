@@ -35,7 +35,7 @@ import { LoggerMiddleware } from 'src/common/middleware/logger.middleware';
   providers:[
     PrismaService,
     AuthService,
-     {
+    {
       provide: 'IUserRepository',
       useClass: UserRepository,
     },
