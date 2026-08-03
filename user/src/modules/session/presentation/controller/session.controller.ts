@@ -5,8 +5,7 @@ import {
   HttpStatus,
   Query,
 } from '@nestjs/common';
-
-import { SessionService } from '../../application/session.service';
+import { SessionService }
 
 import {
   ListSessionsQueryDto,
