@@ -5,15 +5,12 @@ import {
   HttpStatus,
   Query,
 } from '@nestjs/common';
-import { SessionService }
 
 import {
   ListSessionsQueryDto,
 } from '../dto/session.dto';
 
-import {
-  SessionListResponseDto,
-} from '../dto/session.response.dto';
+import { SessionListResponseDto } from '../dto/session.response.dto';
 
 import {
   CurrentUser,
@@ -29,7 +26,7 @@ export class SessionController {
     private readonly sessionService: SessionService,
   ) {}
 
-  @Get()
+  @Get('list-get')
   @HttpCode(HttpStatus.OK)
   async listSessions(
     @CurrentUser() user: JwtPayload,
