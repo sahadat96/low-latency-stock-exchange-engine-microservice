@@ -5,8 +5,6 @@ import {
   SessionListResponseDto,
 } from '../../presentation/dto/session.response.dto';
 
-import { ListSessionsQueryDto } from '../../presentation/dto/session.dto';
-
 export class SessionMapper {
   /**
    * Convert Session entity to response DTO.
