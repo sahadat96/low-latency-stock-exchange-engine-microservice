@@ -5,6 +5,7 @@ import { ConfigModule } from '@nestjs/config';
 import configuration from './config/configuration';
 import { AuthModule } from './modules/auth/auth.module';
 import { ApiKeyModule } from './modules/api-key/api-key.module';
+import { SessionModule } from './modules/session/session.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { ApiKeyModule } from './modules/api-key/api-key.module';
       load: [configuration],
     }),
     AuthModule,
+    SessionModule,
   ],
   controllers: [AppController],
   providers: [AppService],
