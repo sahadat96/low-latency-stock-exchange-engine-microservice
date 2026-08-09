@@ -16,3 +16,5 @@ export class SessionListResponseDto {
   active!: number;
   revoked!: number;
 }
+
+export class CreateSessionResponseDto extends SessionDto {}

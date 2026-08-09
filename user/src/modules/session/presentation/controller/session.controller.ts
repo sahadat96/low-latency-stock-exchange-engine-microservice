@@ -4,13 +4,20 @@ import {
   HttpCode,
   HttpStatus,
   Query,
+  Post,
+  Body,
+  Ip,
 } from '@nestjs/common';
 
 import {
   ListSessionsQueryDto,
+  CreateSessionDto,
 } from '../dto/session.dto';
 
-import { SessionListResponseDto } from '../dto/session.response.dto';
+import { 
+  SessionListResponseDto,
+  CreateSessionResponseDto,
+ } from '../dto/session.response.dto';
 
 import {
   CurrentUser,
@@ -25,6 +32,19 @@ export class SessionController {
   constructor(
     private readonly sessionService: SessionService,
   ) {}
+
+  @Post()
+  @HttpCode(HttpStatus.CREATED)
+  async createSession(
+    @Body() dto: CreateSessionDto,
+    @Ip() ip: string,
+  ): Promise<CreateSessionResponseDto> {
+
+    return this.sessionService.createSession(
+      dto,
+      ip,
+    );
+  }
 
   @Get('list-get')
   @HttpCode(HttpStatus.OK)
