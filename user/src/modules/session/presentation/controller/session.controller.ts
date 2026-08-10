@@ -9,6 +9,8 @@ import {
   Ip,
 } from '@nestjs/common';
 
+import { SessionService } from '../../application/session.service';
+
 import {
   ListSessionsQueryDto,
   CreateSessionDto,
