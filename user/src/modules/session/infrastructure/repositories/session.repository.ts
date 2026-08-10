@@ -41,4 +41,20 @@ export class SessionRepository implements ISessionRepository {
       },
     });
   }
+
+  async findById(
+    filter: FindSessionByIdFilter,
+  ): Promise<SessionEntity | null> {
+
+    return this.prisma.session.findFirst({
+      where: {
+        id: filter.id,
+        userId: filter.userId,
+
+        revokedAt: filter.includeRevoked
+          ? undefined
+          : null,
+      },
+    });
+  }
 }
