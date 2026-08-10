@@ -57,4 +57,24 @@ export class SessionRepository implements ISessionRepository {
       },
     });
   }
+
+  async findAllByUser(
+    filter: ListSessionsFilter,
+  ): Promise<SessionEntity[]> {
+
+    return this.prisma.session.findMany({
+      where: {
+        userId: filter.userId,
+
+        revokedAt:
+          filter.includeRevoked === false
+            ? null
+            : undefined,
+      },
+
+      orderBy: {
+        createdAt: 'desc',
+      },
+    });
+  }
 }
