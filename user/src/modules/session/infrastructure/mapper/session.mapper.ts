@@ -3,12 +3,11 @@ import { SessionEntity } from '../../domain/types/session.types';
 import {
   SessionDto,
   SessionListResponseDto,
+  CreateSessionResponseDto,
 } from '../../presentation/dto/session.response.dto';
 
 export class SessionMapper {
-  /**
-   * Convert Session entity to response DTO.
-   */
+
   static toDto(
     session: SessionEntity,
     currentSessionId?: string,
@@ -34,9 +33,6 @@ export class SessionMapper {
     };
   }
 
-  /**
-   * Convert session list to response DTO.
-   */
   static toListResponseDto(
     allSessions: SessionEntity[],
     filteredSessions: SessionEntity[],
@@ -64,5 +60,12 @@ export class SessionMapper {
           session.expiresAt <= new Date(),
       ).length,
     };
+  }
+
+  static toCreateResponseDto(
+    session: SessionEntity,
+  ): CreateSessionResponseDto {
+
+    return this.toDto(session);
   }
 }

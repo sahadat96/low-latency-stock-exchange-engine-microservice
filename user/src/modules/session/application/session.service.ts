@@ -12,15 +12,13 @@ import {
   AuditAction,
 } from '@prisma/client';
 
-import {
-  IAuditLogRepository,
-} from '../domain/interfaces/audit-log.repository.interface';
+import type { 
+    IAuditLogRepository,
+} from '@/modules/api-key/domain/interfaces/audit-log.repository.interfacet';
 
-import {
-  AUDIT_LOG_REPOSITORY,
-} from '../domain/interfaces/audit-log.repository.interface';
+import { AUDIT_LOG_REPOSITORY } from '@/modules/api-key/domain/interfaces/audit-log.repository.interfacet';
 
-import {
+import type {
   ISessionRepository,
 } from '../domain/interfaces/session.repository.interface';
 
@@ -51,20 +49,13 @@ export class SessionService {
     new Logger(SessionService.name);
 
   constructor(
-
     @Inject(SESSION_REPOSITORY)
     private readonly sessionRepository: ISessionRepository,
 
     @Inject(AUDIT_LOG_REPOSITORY)
     private readonly auditLogRepository: IAuditLogRepository,
-
   ) {}
 
-  /**
-   * Create authentication session.
-   *
-   * Raw refresh token is NEVER persisted.
-   */
   async createSession(
     dto: CreateSessionDto,
     ipAddress?: string,
@@ -85,11 +76,6 @@ export class SessionService {
       );
     }
 
-    /**
-     * Hash refresh token before persistence.
-     *
-     * NEVER store the raw refresh token in PostgreSQL.
-     */
     const refreshTokenHash = await bcrypt.hash(
       dto.refreshToken,
       BCRYPT_ROUNDS,
@@ -150,10 +136,6 @@ export class SessionService {
       session,
     );
   }
-
-  /**
-   * List sessions belonging to authenticated user.
-   */
 
   private fireAuditLog(
     payload: Parameters<

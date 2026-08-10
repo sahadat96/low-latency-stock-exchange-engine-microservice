@@ -4,9 +4,15 @@ import {
   ListSessionsFilter,
   RevokeSessionPayload,
   RevokeAllSessionsPayload,
+  CreateSessionPayload,
 } from '../types/session.types';
 
 export interface ISessionRepository {
+
+  create(
+    payload: CreateSessionPayload,
+  ): Promise<SessionEntity>;
+
   findById(
     filter: FindSessionByIdFilter,
   ): Promise<SessionEntity | null>;

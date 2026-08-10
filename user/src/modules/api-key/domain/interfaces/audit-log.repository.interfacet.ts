@@ -14,7 +14,6 @@ export interface CreateAuditLogPayload {
   failureReason?: string;
 }
 
-
 export interface IAuditLogRepository {
   create(payload: CreateAuditLogPayload): Promise<void>;
 }
