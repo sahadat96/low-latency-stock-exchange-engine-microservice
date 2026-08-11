@@ -104,4 +104,30 @@ export class SessionRepository implements ISessionRepository {
       },
     });
   }
+
+  async revokeAll(
+    payload: RevokeAllSessionsPayload,
+  ): Promise<number> {
+
+    const result = await this.prisma.session.updateMany({
+      where: {
+        userId: payload.userId,
+
+        revokedAt: null,
+
+        ...(payload.exceptSessionId ? {
+              id: {
+                not: payload.exceptSessionId,
+              },
+            }
+          : {}),
+      },
+
+      data: {
+        revokedAt: new Date(),
+      },
+    });
+
+    return result.count;
+  }
 }

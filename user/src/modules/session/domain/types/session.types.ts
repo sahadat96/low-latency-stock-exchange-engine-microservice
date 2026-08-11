@@ -31,4 +31,5 @@ export interface RevokeSessionPayload {
 
 export interface RevokeAllSessionsPayload {
   userId: string;
+  exceptSessionId?: string;
 }
