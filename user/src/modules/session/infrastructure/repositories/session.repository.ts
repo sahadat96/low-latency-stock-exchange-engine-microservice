@@ -77,4 +77,31 @@ export class SessionRepository implements ISessionRepository {
       },
     });
   }
+
+  async revoke(
+    payload: RevokeSessionPayload,
+  ): Promise<SessionEntity | null> {
+
+    const session = await this.prisma.session.findFirst({
+      where: {
+        id: payload.id,
+        userId: payload.userId,
+        revokedAt: null,
+      },
+    });
+
+    if (!session) {
+      return null;
+    }
+
+    return this.prisma.session.update({
+      where: {
+        id: session.id,
+      },
+
+      data: {
+        revokedAt: new Date(),
+      },
+    });
+  }
 }
