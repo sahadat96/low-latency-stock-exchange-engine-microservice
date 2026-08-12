@@ -153,4 +153,39 @@ export class SessionService {
 
       });
   }
+
+  async listSessions(
+    userId: string,
+    query: ListSessionsQueryDto,
+    currentSessionId?: string,
+  ): Promise<SessionListResponseDto> {
+
+    const sessions =
+      await this.sessionRepository.findAllByUser({
+        userId,
+        includeRevoked: true,
+      });
+
+    const now = new Date();
+
+    const filteredSessions =
+      query.active === undefined
+        ? sessions
+        : sessions.filter((session) => {
+
+            const active =
+              session.revokedAt === null &&
+              session.expiresAt > now;
+
+            return query.active
+              ? active
+              : !active;
+          });
+
+    return SessionMapper.toListResponseDto(
+      sessions,
+      filteredSessions,
+      currentSessionId,
+    );
+  }
 }
