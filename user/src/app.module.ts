@@ -15,6 +15,7 @@ import { SessionModule } from './modules/session/session.module';
       load: [configuration],
     }),
     AuthModule,
+    ApiKeyModule,
     SessionModule,
   ],
   controllers: [AppController],
