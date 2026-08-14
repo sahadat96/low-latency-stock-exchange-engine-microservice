@@ -154,6 +154,7 @@ export class SessionService {
       });
   }
 
+  // Get listSessions
   async listSessions(
     userId: string,
     query: ListSessionsQueryDto,
