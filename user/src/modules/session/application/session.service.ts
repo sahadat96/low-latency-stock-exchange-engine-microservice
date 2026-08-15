@@ -56,6 +56,7 @@ export class SessionService {
     private readonly auditLogRepository: IAuditLogRepository,
   ) {}
 
+  // Create Session
   async createSession(
     dto: CreateSessionDto,
     ipAddress?: string,
