@@ -24,6 +24,7 @@ export class SessionRepository implements ISessionRepository {
     private readonly prisma: PrismaService,
   ) {}
 
+  // Create Session
   async create(
     payload: CreateSessionPayload,
   ): Promise<SessionEntity> {
@@ -42,6 +43,7 @@ export class SessionRepository implements ISessionRepository {
     });
   }
 
+  // Find session by id
   async findById(
     filter: FindSessionByIdFilter,
   ): Promise<SessionEntity | null> {
@@ -58,6 +60,7 @@ export class SessionRepository implements ISessionRepository {
     });
   }
 
+ // Find session by all user
   async findAllByUser(
     filter: ListSessionsFilter,
   ): Promise<SessionEntity[]> {
@@ -78,6 +81,7 @@ export class SessionRepository implements ISessionRepository {
     });
   }
 
+  // Revoke
   async revoke(
     payload: RevokeSessionPayload,
   ): Promise<SessionEntity | null> {
@@ -105,6 +109,7 @@ export class SessionRepository implements ISessionRepository {
     });
   }
 
+  // Revoke all
   async revokeAll(
     payload: RevokeAllSessionsPayload,
   ): Promise<number> {
