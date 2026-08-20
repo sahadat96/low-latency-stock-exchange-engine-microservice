@@ -8,13 +8,9 @@ import {
 import { Kafka, Producer } from 'kafkajs';
 
 @Injectable()
-export class KafkaService
-  implements OnModuleInit, OnModuleDestroy
-{
+export class KafkaService implements OnModuleInit, OnModuleDestroy{
   private readonly logger = new Logger(KafkaService.name);
-
   private readonly kafka: Kafka;
-
   private readonly producer: Producer;
 
   constructor() {
@@ -30,6 +26,10 @@ export class KafkaService
 
   async onModuleInit(): Promise<void> {
     await this.connect();
+  }
+
+  async onModuleDestroy(): Promise<void> {
+    await this.disconnect();
   }
 
   private async connect(): Promise<void> {
@@ -48,6 +48,23 @@ export class KafkaService
       );
 
       throw error;
+    }
+  }
+
+  private async disconnect(): Promise<void> {
+    try {
+      await this.producer.disconnect();
+
+      this.logger.log(
+        'Kafka producer disconnected successfully',
+      );
+    } catch (error) {
+      this.logger.error(
+        'Failed to disconnect Kafka producer',
+        error instanceof Error
+          ? error.stack
+          : String(error),
+      );
     }
   }
 }
