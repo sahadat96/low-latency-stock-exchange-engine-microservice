@@ -67,4 +67,24 @@ export class KafkaService implements OnModuleInit, OnModuleDestroy{
       );
     }
   }
+
+  async publish<T>(
+    topic: string,
+    payload: T,
+    key?: string,
+  ): Promise<void> {
+    await this.producer.send({
+      topic,
+      messages: [
+        {
+          key,
+          value: JSON.stringify(payload),
+        },
+      ],
+    });
+
+    this.logger.debug(
+      `Kafka event published: topic=${topic}`,
+    );
+  }
 }
