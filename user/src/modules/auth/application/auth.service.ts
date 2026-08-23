@@ -21,6 +21,8 @@ import { User } from '../domain/entities/user.entity';
 import { RegisterDto } from '../presentation/dto/register.dto';
 import { LoginDto } from '../presentation/dto/login.dto';
 import { RoleType } from 'src/common/enums/role-type.enum';
+import { KafkaService } from '@/modules/kafka-module/application/kafka.service';
+import { KAFKA_TOPICS } from '@/modules/kafka-module/kafka.constants';
 
 @Injectable()
 export class AuthService {
@@ -29,6 +31,7 @@ export class AuthService {
     private readonly userRepository: IUserRepository,
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService,
+    private readonly kafkaService: KafkaService,
   ) {}
 
   async register(registerDto: RegisterDto): Promise<any> {
