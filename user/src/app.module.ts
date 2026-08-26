@@ -6,6 +6,7 @@ import configuration from './config/configuration';
 import { AuthModule } from './modules/auth/auth.module';
 import { ApiKeyModule } from './modules/api-key/api-key.module';
 import { SessionModule } from './modules/session/session.module';
+import { KafkaModule } from './modules/kafka-module/kafka.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { SessionModule } from './modules/session/session.module';
     AuthModule,
     ApiKeyModule,
     SessionModule,
+    KafkaModule,
   ],
   controllers: [AppController],
   providers: [AppService],

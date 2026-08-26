@@ -12,7 +12,7 @@ import { AuthService } from './application/auth.service';
 import { UserRepository } from './infrastructure/repositories/user.repository';
 import { AuthController } from './presentation/controller/auth.controller';
 import { LoggerMiddleware } from 'src/common/middleware/logger.middleware';
-
+import { KafkaModule } from '../kafka-module/kafka.module';
 
 @Module({
   imports:[
@@ -28,6 +28,9 @@ import { LoggerMiddleware } from 'src/common/middleware/logger.middleware';
         },
       }),
     }),
+
+    KafkaModule,
+
   ],
   controllers:[
     AuthController
