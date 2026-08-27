@@ -5,6 +5,7 @@ export interface KafkaConfig {
   brokers: string[];
 }
 
+// kafka config
 export default registerAs(
   'kafka',
   (): KafkaConfig => ({
