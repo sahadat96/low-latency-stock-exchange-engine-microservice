@@ -61,10 +61,47 @@ model Wallet {
 
   status           WalletStatus     @default(ACTIVE)
 
+  transactions     WalletTransaction[]
+
   createdAt        DateTime         @default(now()) @map("created_at") @db.Timestamptz
   updatedAt        DateTime         @updatedAt @map("updated_at") @db.Timestamptz
 
   @@index([status])
   @@map("wallets")
 }
+
+// ============================================================
+// WALLET TRANSACTIONS
+// ============================================================
+
+model WalletTransaction {
+  id              String            @id @default(uuid()) @db.Uuid
+
+  walletId        String            @map("wallet_id") @db.Uuid
+
+  type            TransactionType
+  status          TransactionStatus @default(PENDING)
+
+  amount          Decimal           @db.Decimal(30, 8)
+  currency        Currency
+
+  balanceBefore   Decimal           @map("balance_before") @db.Decimal(30, 8)
+  balanceAfter    Decimal           @map("balance_after") @db.Decimal(30, 8)
+
+  referenceId     String?           @map("reference_id") @db.VarChar(255)
+  description     String?           @db.VarChar(500)
+
+  createdAt       DateTime          @default(now()) @map("created_at") @db.Timestamptz
+  completedAt     DateTime?         @map("completed_at") @db.Timestamptz
+
+  wallet          Wallet            @relation(fields: [walletId], references: [id], onDelete: Restrict)
+
+  @@index([walletId])
+  @@index([walletId, createdAt])
+  @@index([type])
+  @@index([status])
+  @@index([referenceId])
+  @@map("wallet_transactions")
+}
+
 
