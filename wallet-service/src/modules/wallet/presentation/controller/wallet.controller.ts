@@ -9,13 +9,9 @@ import { WalletService } from '../../application/wallet.service';
 
 import { WalletDto } from '../dto/wallet.dto';
 
-import {
-  CurrentUser,
-} from '@/common/decorators/current.user.decorato';
+import { CurrentUser } from 'src/common/decorators/current.user.decorato';
 
-import type {
-  JwtPayload,
-} from '@/common/decorators/current.user.decorato';
+import type { JwtPayload } from 'src/common/decorators/current.user.decorato';
 
 @Controller('wallets')
 export class WalletController {
