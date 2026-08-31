@@ -6,3 +6,44 @@ generator client {
 datasource db {
   provider = "postgresql"
 }
+
+// ============================================================
+// ENUMS
+// ============================================================
+
+enum WalletStatus {
+  ACTIVE
+  FROZEN
+  CLOSED
+
+  @@map("wallet_status")
+}
+
+enum TransactionType {
+  DEPOSIT
+  WITHDRAWAL
+  TRADE_DEBIT
+  TRADE_CREDIT
+
+  @@map("transaction_type")
+}
+
+enum TransactionStatus {
+  PENDING
+  COMPLETED
+  FAILED
+  REVERSED
+
+  @@map("transaction_status")
+}
+
+enum Currency {
+  USD
+  BTC
+  ETH
+  USDT
+
+  @@map("currency")
+}
+
+
