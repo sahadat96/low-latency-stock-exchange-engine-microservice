@@ -1,6 +1,9 @@
 import { Module } from '@nestjs/common';
 
+import { WALLET_REPOSITORY } from './domain/interfaces/wallet.repository.interface';
+import { WalletService } from './application/wallet.service';
 import { WalletController } from './presentation/controller/wallet.controller';
+import { WalletRepository } from './infrastructure/wallet.repository';
 
 @Module({
   imports: [
@@ -10,8 +13,16 @@ import { WalletController } from './presentation/controller/wallet.controller';
     WalletController,
   ],
 
-  providers: [],
+  providers: [
+    WalletService,
+    {
+      provide: WALLET_REPOSITORY,
+      useClass: WalletRepository,
+    },
+  ],
 
-  exports: [],
+  exports: [
+    WalletService
+  ],
 })
 export class WalletModule {}
