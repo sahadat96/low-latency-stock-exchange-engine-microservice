@@ -24,19 +24,13 @@ import type {
   TransactionDto,
 } from '../presentation/dto/transaction.dto';
 
-import {
-  TransactionMapper,
-} from '../infrastructure/mapper/transaction.mapper';
+import { TransactionMapper } from '../infrastructure/mapper/transaction.mapper';
 
 export interface TransactionListResponseDto {
   transactions: TransactionDto[];
-
   total: number;
-
   page: number;
-
   perPage: number;
-
   totalPages: number;
 }
 
@@ -61,13 +55,9 @@ export class TransactionService {
 
     const filter: ListTransactionsFilter = {
       userId,
-
       page,
-
       perPage,
-
       type: query.type,
-
       status: query.status,
 
       fromDate: query.fromDate
@@ -90,9 +80,7 @@ export class TransactionService {
       ),
 
       total: result.total,
-
       page,
-
       perPage,
 
       totalPages: Math.ceil(
