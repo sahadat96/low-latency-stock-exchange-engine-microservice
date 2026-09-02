@@ -4,6 +4,7 @@ import { WALLET_REPOSITORY } from './domain/interfaces/wallet.repository.interfa
 import { WalletService } from './application/wallet.service';
 import { WalletController } from './presentation/controller/wallet.controller';
 import { WalletRepository } from './infrastructure/wallet.repository';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { WalletRepository } from './infrastructure/wallet.repository';
 
   providers: [
     WalletService,
+    PrismaService,
     {
       provide: WALLET_REPOSITORY,
       useClass: WalletRepository,
