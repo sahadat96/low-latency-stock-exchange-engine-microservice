@@ -25,7 +25,6 @@ import {
     PrismaService,
     {
       provide: TRANSACTION_REPOSITORY,
-
       useClass: TransactionRepository,
     },
   ],
