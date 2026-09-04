@@ -1,5 +1,7 @@
 import { registerAs } from '@nestjs/config';
 
+//kafka config
+
 export default registerAs('kafka', () => ({
   clientId:
     process.env.KAFKA_CLIENT_ID ??
