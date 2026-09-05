@@ -1,0 +1,109 @@
+syntax = "proto3";
+
+package risk;
+
+option cc_enable_arenas = true;
+
+// ===============================
+// Risk Service
+// ===============================
+
+service RiskService {
+  rpc CheckPreTrade(PreTradeRequest)
+      returns (PreTradeResponse);
+
+  rpc GetRiskProfile(RiskProfileRequest)
+      returns (RiskProfileResponse);
+}
+
+// ===============================
+// Enums
+// ===============================
+
+enum OrderSide {
+  ORDER_SIDE_UNSPECIFIED = 0;
+  BUY = 1;
+  SELL = 2;
+}
+
+enum OrderType {
+  ORDER_TYPE_UNSPECIFIED = 0;
+  MARKET = 1;
+  LIMIT = 2;
+}
+
+enum RiskRejectReason {
+  RISK_REJECT_REASON_UNSPECIFIED = 0;
+
+  INSUFFICIENT_BALANCE = 1;
+  POSITION_LIMIT_EXCEEDED = 2;
+  ORDER_SIZE_TOO_SMALL = 3;
+  ORDER_SIZE_TOO_LARGE = 4;
+  PRICE_OUT_OF_BAND = 5;
+  RATE_LIMIT_EXCEEDED = 6;
+  WALLET_SERVICE_UNAVAILABLE = 7;
+  PRICE_UNAVAILABLE = 8;
+  POSITION_UNAVAILABLE = 9;
+  RISK_SERVICE_UNAVAILABLE = 10;
+}
+
+// ===============================
+// Pre-Trade Request
+// ===============================
+
+message PreTradeRequest {
+  string request_id = 1;
+  string user_id = 2;
+  string symbol = 3;
+  OrderSide side = 4;
+  OrderType type = 5;
+  string price = 6;
+  string quantity = 7;
+  string correlation_id = 8;
+}
+
+// ===============================
+// Pre-Trade Response
+// ===============================
+
+message PreTradeResponse {
+  bool passed = 1;
+  RiskRejectReason reason_code = 2;
+  string message = 3;
+  string failed_check = 4;
+
+  // Total risk-check processing latency.
+  int64 latency_us = 5;
+
+  string request_id = 6;
+}
+
+// ===============================
+// Risk Profile
+// ===============================
+
+message RiskProfileRequest {
+  string user_id = 1;
+}
+
+message RiskProfileResponse {
+  string user_id = 1;
+
+  // Maximum position allowed for one symbol.
+  string max_position_size = 2;
+
+  // Maximum quantity allowed in one order.
+  string max_order_size = 3;
+
+  // Minimum quantity allowed in one order.
+  string min_order_size = 4;
+
+  // Maximum deviation from last traded price.
+  string price_band_percent = 5;
+
+  // Maximum number of orders in the configured window.
+  int32 order_rate_limit_count = 6;
+
+  // Rate limit window in milliseconds.
+  int64 order_rate_limit_window_ms = 7;
+}
