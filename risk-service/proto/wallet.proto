@@ -1,0 +1,49 @@
+syntax = "proto3";
+
+package wallet;
+
+option cc_enable_arenas = true;
+
+// ===============================
+// Wallet Service
+// ===============================
+
+service WalletService {
+  rpc GetBalance(GetBalanceRequest)
+      returns (GetBalanceResponse);
+}
+
+// ===============================
+// Get Balance
+// ===============================
+
+message GetBalanceRequest {
+  string user_id = 1;
+
+  // Currency to check, e.g. USD.
+  string currency = 2;
+
+  // Optional correlation ID for distributed tracing.
+  string correlation_id = 3;
+}
+
+// ===============================
+// Get Balance Response
+// ===============================
+
+message GetBalanceResponse {
+  string wallet_id = 1;
+
+  string user_id = 2;
+
+  string currency = 3;
+
+  // Available funds that can currently be used.
+  string available_balance = 4;
+
+  // Funds currently locked/reserved.
+  string locked_balance = 5;
+
+  // available_balance + locked_balance
+  string total_balance = 6;
+}
