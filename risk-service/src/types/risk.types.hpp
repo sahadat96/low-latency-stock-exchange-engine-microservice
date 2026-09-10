@@ -50,7 +50,7 @@ enum class RiskRejectReason {
 // ============================================================
 // Pre-Trade Order
 //
-// This is the internal domain representation of an order.
+// Internal domain representation of an order.
 // It is intentionally independent of gRPC/protobuf.
 // ============================================================
 
