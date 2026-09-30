@@ -22,7 +22,6 @@ namespace {
  * Algorithm:
  *
  * 1. Remove requests outside the sliding window.
- * 2. Count requests currently inside the window.
  * 3. Reject if limit already reached.
  * 4. Otherwise record this request.
  * 5. Refresh key TTL.
